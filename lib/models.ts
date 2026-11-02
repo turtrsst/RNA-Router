@@ -3,7 +3,7 @@ export type ModelProvider = "muse" | "agnes" | "gemini" | "deepseek" | "kimi" | 
 export interface ModelDef {
   id: string; // OpenRouter-style id
   name: string;
-  provider: ModelProvider;
+  provider: string;
   endpoint: string;
   freeTier: boolean;
   contextWindow: number;
