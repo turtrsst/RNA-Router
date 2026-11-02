@@ -105,13 +105,13 @@ export const MODELS = [
 ];
 
 export function getModel(id: string): ModelDef | undefined {
-  return MODELS.find((m) => m && (m.id === id || m.id.includes(id)));
+  return MODELS.find((m: any) => m && (m.id === id || m.id.includes(id))) as ModelDef | undefined;
 }
 
 export function searchModels(query: string): ModelDef[] {
   const q = query.toLowerCase();
-  return MODELS.filter(
-    (m) =>
+  return (MODELS.filter(
+    (m: any) =>
       m.name.toLowerCase().includes(q) ||
       m.tags.some((t) => t.includes(q)) ||
       m.capabilities.some((c) => c.includes(q)) ||
