@@ -105,7 +105,7 @@ export const MODELS = [
 ];
 
 export function getModel(id: string): ModelDef | undefined {
-  return MODELS.find((m) => m.id === id || m.id.includes(id));
+  return MODELS.find((m) => m && (m.id === id || m.id.includes(id)));
 }
 
 export function searchModels(query: string): ModelDef[] {
