@@ -11,7 +11,7 @@ export default function DashboardPage() {
   const [keys, setKeys] = useState<KeyRecord[]>([]);
   const [keyProvider, setKeyProvider] = useState("muse");
   const [keyValue, setKeyValue] = useState("");
-  const [userApi, setUserApi] = useState(() => { try { return localStorage.getItem("rna_user_api") || "rna-user-demo"; } catch { return "rna-user-demo"; } });
+  const [userApi, setUserApi] = useState(() => { try { return localStorage.getItem("rna_user_api") || "rna-user"; } catch { return "rna-user"; } });
   const [message, setMessage] = useState("");
   const [keyStatus, setKeyStatus] = useState<Record<string, boolean>>({});
   const [models, setModels] = useState(MODELS);

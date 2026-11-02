@@ -19,7 +19,7 @@ export interface ProxyResp {
   model?: string;
 }
 
-// User-provided keys from Supabase (simplified for demo)
+// User-provided keys from Supabase (key vault)
 export async function callProvider(
   modelId: string,
   payload: ProxyReq,
