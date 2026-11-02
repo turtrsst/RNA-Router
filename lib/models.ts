@@ -12,7 +12,7 @@ export interface ModelDef {
   icon: string;
 }
 
-export const MODELS: ModelDef[] = [
+export const MODELS = [
   {
     id: "muse-spark-1.2-free",
     name: "Muse Spark 1.2 (Free)",
