@@ -4,6 +4,7 @@ import { getFallbackOrder, isRateLimitStatus } from "@/lib/fallback";
 import { dbQuery } from "@/lib/db";
 import { verifyJWT, extractToken, signJWT } from "@/lib/auth";
 import { createSSEResponse } from "@/lib/stream";
+import { exec } from "child_process";
 
 export async function POST(req: NextRequest) {
   try {
@@ -45,6 +46,8 @@ export async function POST(req: NextRequest) {
         const fb = await callProvider(fallbackId, { ...body, model: fallbackId }, userKeys);
         if (fb.ok) {
           result = fb;
+          // Notifikasi desktop saat fallback sukses
+          exec(`bash scripts/notify-fallback.sh "${modelId}" "${fallbackId}" "${fb.status}"`);
           // Log fallback event
           try {
             await dbQuery(
