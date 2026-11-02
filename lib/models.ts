@@ -113,8 +113,8 @@ export function searchModels(query: string): ModelDef[] {
   return (MODELS.filter(
     (m: any) =>
       m.name.toLowerCase().includes(q) ||
-      m.tags.some((t) => t.includes(q)) ||
-      m.capabilities.some((c) => c.includes(q)) ||
-      m.provider.includes(q)
-  );
+      (m.tags || []).some((t: any) => t.includes(q)) ||
+      (m.capabilities || []).some((c: any) => c.includes(q)) ||
+      (m.provider || "").includes(q)
+  ) as ModelDef[]);
 }
