@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServiceClient } from "@/lib/supabase";
+import { verifyJWT, extractToken } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
-  const apiKey = req.headers.get("x-api-key") || "";
+  const token = extractToken(req.headers);
+  let userId = token || "";
+  if (!userId || userId.length < 5) {
+    try { const payload = verifyJWT(token || ""); userId = payload.sub; } catch {}
+  }
+  const apiKey = userId || "";
   if (!apiKey) return NextResponse.json({ error: "Missing x-api-key" }, { status: 401 });
   try {
     const svc = getServiceClient();
@@ -19,7 +25,10 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const apiKey = req.headers.get("x-api-key") || body.user_api_key || "";
+    const token = extractToken(req.headers);
+    let userId = token || body.user_api_key || "";
+    if (!userId || userId.length < 5) { try { const payload = verifyJWT(token || ""); userId = payload.sub; } catch {} }
+    const apiKey = userId || "";
     if (!apiKey) return NextResponse.json({ error: "Need user_api_key" }, { status: 400 });
     const svc = getServiceClient();
     const { error } = await svc.from("user_keys").upsert({
@@ -38,7 +47,10 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     const body = await req.json();
-    const apiKey = req.headers.get("x-api-key") || body.user_api_key || "";
+    const token = extractToken(req.headers);
+    let userId = token || body.user_api_key || "";
+    if (!userId || userId.length < 5) { try { const payload = verifyJWT(token || ""); userId = payload.sub; } catch {} }
+    const apiKey = userId || "";
     if (!apiKey) return NextResponse.json({ error: "Need user_api_key" }, { status: 400 });
     const svc = getServiceClient();
     await svc.from("user_keys").delete().eq("user_api_key", apiKey).eq("provider", body.provider);
