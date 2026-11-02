@@ -13,6 +13,7 @@ export default function DashboardPage() {
   const [keyValue, setKeyValue] = useState("");
   const [userApi, setUserApi] = useState(() => { try { return localStorage.getItem("rna_user_api") || "rna-user-demo"; } catch { return "rna-user-demo"; } });
   const [message, setMessage] = useState("");
+  const [keyStatus, setKeyStatus] = useState<Record<string, boolean>>({});
   const [models, setModels] = useState(MODELS);
 
   useEffect(() => {
@@ -156,8 +157,8 @@ export default function DashboardPage() {
                 {keys.map((k) => (
                   <tr key={k.provider} className="hover:bg-white/[0.03]">
                     <td className="px-4 py-3 font-medium">{k.provider}</td>
-                    <td className="px-4 py-3"><span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-900/40 border border-emerald-700/30 px-2.5 py-0.5 text-xs text-emerald-200"><ShieldCheck className="h-3 w-3" /> Terhubung</span></td>
-                    <td className="px-4 py-3"><button onClick={async () => { await fetch("/api/keys", { method: "DELETE", headers: { "Content-Type":"application/json", "x-api-key": userApi }, body: JSON.stringify({ provider: k.provider })}); loadKeys(); }} className="text-xs text-rose-300 hover:text-rose-200 underline">Hapus</button></td>
+                    <td className="px-4 py-3"><span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs ${keyStatus[k.provider] === true ? "bg-emerald-900/40 border-emerald-700/30 text-emerald-200" : keyStatus[k.provider] === false ? "bg-rose-900/40 border-rose-700/30 text-rose-200" : "bg-amber-900/40 border-amber-700/30 text-amber-200"}`}><ShieldCheck className="h-3 w-3" /> {keyStatus[k.provider] === true ? "Valid" : keyStatus[k.provider] === false ? "Invalid" : "Terhubung"}</span></td>
+                    <td className="px-4 py-3"><button onClick={async () => { try { const r = await fetch("/api/keys/validate", { method: "POST", headers: { "Content-Type":"application/json", "x-api-key": userApi }, body: JSON.stringify({ provider: k.provider, model_id: "gemini-flash-1.5" }) }); const j = await r.json(); setKeyStatus((prev) => ({ ...prev, [k.provider]: j.valid === true })); } catch(e){} }} className="text-xs text-rna-300 hover:text-rna-200 underline">Test</button> <button onClick={async () => { await fetch("/api/keys", { method: "DELETE", headers: { "Content-Type":"application/json", "x-api-key": userApi }, body: JSON.stringify({ provider: k.provider })}); loadKeys(); }} className="text-xs text-rose-300 hover:text-rose-200 underline">Hapus</button></td>
                   </tr>
                 ))}
                 {keys.length === 0 && (
