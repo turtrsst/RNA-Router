@@ -11,7 +11,7 @@ export default function DashboardPage() {
   const [keys, setKeys] = useState<KeyRecord[]>([]);
   const [keyProvider, setKeyProvider] = useState("muse");
   const [keyValue, setKeyValue] = useState("");
-  const [userApi, setUserApi] = useState("rna-user-" + Math.random().toString(36).slice(2, 10));
+  const [userApi, setUserApi] = useState(() => { try { return localStorage.getItem("rna_user_api") || "rna-user-demo"; } catch { return "rna-user-demo"; } });
   const [message, setMessage] = useState("");
   const [models, setModels] = useState(MODELS);
 
@@ -23,6 +23,7 @@ export default function DashboardPage() {
   }, [query]);
 
   useEffect(() => {
+    try { localStorage.setItem("rna_user_api", userApi); } catch {}
     loadKeys();
   }, [userApi]);
 
