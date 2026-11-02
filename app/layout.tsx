@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "OpenRouter-compatible AI gateway with multi-provider free tier, auto-fallback, and key vault.",
 };
 
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "./components/Sidebar";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
