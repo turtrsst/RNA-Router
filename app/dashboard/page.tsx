@@ -52,11 +52,7 @@ export default function DashboardPage() {
 
   const filtered = useMemo(() => {
     if (!query) return models;
-    return models.filter((m) =>
-      m.name.toLowerCase().includes(query.toLowerCase()) ||
-      m.tags.some((t) => t.includes(query.toLowerCase())) ||
-      m.provider.includes(query.toLowerCase())
-    );
+    return (models || []).filter((m: any) => m && (m.name?.toLowerCase().includes(query.toLowerCase()) || (m.tags||[]).some((t:any)=>t.includes(query.toLowerCase())) || (m.provider||"").includes(query.toLowerCase()))) ;
   }, [models, query]);
 
   return (
