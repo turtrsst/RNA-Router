@@ -98,7 +98,7 @@ export default function DashboardPage() {
                 <h3 className="mt-3 text-lg font-bold leading-snug group-hover:text-rna-200 transition-colors">{m.name}</h3>
                 <div className="mt-2 text-sm text-slate-400">{m.id}</div>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {m.tags.map((t) => (
+                  {m.tags.map((t: any) => (
                     <span key={t} className="rounded-md bg-white/5 border border-white/[0.06] px-2 py-0.5 text-xs text-slate-300">{t}</span>
                   ))}
                 </div>
