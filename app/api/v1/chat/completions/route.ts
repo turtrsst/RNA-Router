@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { callProvider } from "@/lib/adapters";
 import { getFallbackOrder, isRateLimitStatus } from "@/lib/fallback";
-import { getServiceClient } from "@/lib/supabase";
+import { dbQuery } from "@/lib/db";
 import { verifyJWT, extractToken, signJWT } from "@/lib/auth";
 import { createSSEResponse } from "@/lib/stream";
 
@@ -27,15 +27,9 @@ export async function POST(req: NextRequest) {
     let userKeys: Record<string, string> = {};
     if (userId && userId.startsWith("rna-user")) {
       try {
-        const svc = getServiceClient();
-        const { data } = await svc
-          .from("user_keys")
-          .select("provider, key_value")
-          .eq("user_api_key", userId)
-          .single();
-        if (data) {
-          // For demo: assume single row or parse; in prod use relation
-          userKeys[data.provider] = data.key_value || "";
+        const rows = await dbQuery("SELECT provider, key_value FROM user_keys WHERE user_api_key = ?", [userId]);
+        for (const r of (rows || [])) {
+          userKeys[r.provider] = r.key_value || "";
         }
       } catch {}
     }
@@ -53,15 +47,10 @@ export async function POST(req: NextRequest) {
           result = fb;
           // Log fallback event
           try {
-            const svc = getServiceClient();
-            await svc.from("gateway_logs").insert({
-              event: "fallback",
-              from_model: modelId,
-              to_model: fallbackId,
-              status: fb.status,
-              user_key: userId || null,
-              created_at: new Date().toISOString(),
-            });
+            await dbQuery(
+              "INSERT INTO gateway_logs (event, from_model, to_model, status, user_key, created_at) VALUES (?, ?, ?, ?, ?, NOW())",
+              ["fallback", modelId, fallbackId, fb.status, userId || null]
+            );
           } catch {}
           break;
         }
@@ -83,15 +72,10 @@ export async function POST(req: NextRequest) {
 
     // Log usage
     try {
-      const svc = getServiceClient();
-      await svc.from("gateway_logs").insert({
-        event: "chat",
-        model: modelId,
-        status: result.status,
-        user_key: userId || null,
-        usage_tokens: result.body.usage?.total_tokens || 0,
-        created_at: new Date().toISOString(),
-      });
+      await dbQuery(
+        "INSERT INTO gateway_logs (event, model, status, user_key, usage_tokens, created_at) VALUES (?, ?, ?, ?, ?, NOW())",
+        ["chat", modelId, result.status, userId || null, result.body.usage?.total_tokens || 0]
+      );
     } catch {}
 
     return NextResponse.json(result.body);
