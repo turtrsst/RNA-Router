@@ -52,7 +52,7 @@ export default function DashboardPage() {
 
   const filtered = useMemo(() => {
     if (!query) return models;
-    return (models || []).filter((m: any) => m && (m.name?.toLowerCase().includes(query.toLowerCase()) || (m.tags||[]).some((t:any)=>t.includes(query.toLowerCase())) || (m.provider||"").includes(query.toLowerCase()))) ;
+    return (models || []).filter((m: any) => m && (m?.name?.toLowerCase().includes(query.toLowerCase()) || (m.tags||[]).some((t:any)=>t.includes(query.toLowerCase())) || (m?.provider||"").includes(query.toLowerCase()))) ;
   }, [models, query]);
 
   return (
@@ -89,14 +89,14 @@ export default function DashboardPage() {
           </div>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filtered.filter((m: any) => m && m.id).map((m: any) => (
-              <div key={m.id} className="glass-card p-6 hover:-translate-y-1 transition-transform duration-300 group">
+            {filtered.filter((m: any) => m && m?.id).map((m: any) => (
+              <div key={m?.id} className="glass-card p-6 hover:-translate-y-1 transition-transform duration-300 group">
                 <div className="flex items-start justify-between">
-                  <div className="text-3xl">{m.icon}</div>
-                  <div className="rounded-full bg-white/5 border border-white/10 px-2 py-0.5 text-xs font-mono text-slate-300">{m.provider}</div>
+                  <div className="text-3xl">{m?.icon}</div>
+                  <div className="rounded-full bg-white/5 border border-white/10 px-2 py-0.5 text-xs font-mono text-slate-300">{m?.provider}</div>
                 </div>
-                <h3 className="mt-3 text-lg font-bold leading-snug group-hover:text-rna-200 transition-colors">{m.name}</h3>
-                <div className="mt-2 text-sm text-slate-400">{m.id}</div>
+                <h3 className="mt-3 text-lg font-bold leading-snug group-hover:text-rna-200 transition-colors">{m?.name}</h3>
+                <div className="mt-2 text-sm text-slate-400">{m?.id}</div>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {m.tags.map((t: any) => (
                     <span key={t} className="rounded-md bg-white/5 border border-white/[0.06] px-2 py-0.5 text-xs text-slate-300">{t}</span>
