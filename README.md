@@ -104,3 +104,21 @@ vercel.json
 
 ---
 Dibuat oleh turtrsst · Branch `arena/ffbada04-rna-router` · Deploy Vercel + Supabase
+
+---
+## Perbandingan dengan 9Router (referensi)
+| Fitur | RNA Router | 9Router |
+|---|---|---|
+| OpenAPI Compatible | ✅ | ✅ |
+| Multi-provider gratis | ✅ (muse, agnes, gemini, deepseek, kimi, 50+) | ✅ (40+) |
+| Auto-fallback | ✅ | ✅ |
+| Custom router | ✅ | ✅ |
+| Key vault (Self-hosted MySQL) | ✅ | ✅ |
+| Usage analytics grafik | ✅ | ✅ |
+| Widget embed | ✅ | ❌ |
+| CLI + systemd + tray | ✅ | ⚠️ |
+| Multi-account per provider | ✅ (DB multi-key) | ✅ |
+| RTK / Token compression | ❌ | ✅ |
+| Cloud sync | ❌ | ✅ |
+| OAuth / JWT auth | ✅ (JWT) | ✅ |
+| Free / Open Source | ✅ MIT | ✅ MIT |
