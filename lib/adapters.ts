@@ -34,10 +34,14 @@ export async function callProvider(
     "Content-Type": "application/json",
     "Accept": "application/json",
   };
+  if ((model as any).customHeaders) {
+    for (const [k,v] of Object.entries((model as any).customHeaders || {})) headers[k] = String(v);
+  }
   let body: any = payload;
 
   // Key management: try user key first, then env/default keys
-  const key = userKeys?.[provider] || process.env[`${provider.toUpperCase()}_API_KEY`] || "";
+  let key = userKeys?.[provider] || process.env[`${provider.toUpperCase()}_API_KEY`] || "";
+  if ((model as any).customApiKey) { key = (model as any).customApiKey; }
   if (key) {
     if (provider === "gemini") {
       url = `${url}?key=${key}`;
