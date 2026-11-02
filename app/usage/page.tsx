@@ -44,9 +44,12 @@ export default async function UsagePage() {
   return (
     <div className="min-h-screen bg-ink-950 text-slate-100 p-6 md:p-12">
       <div className="mx-auto max-w-6xl">
-        <header className="mb-10">
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">Usage Analytics</h1>
-          <p className="mt-3 text-slate-400">Estimasi token, request, dan status model dari gateway RNA Router.</p>
+        <header className="mb-10 flex items-end justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">Usage Analytics</h1>
+            <p className="mt-3 text-slate-400">Estimasi token, request, dan status model dari gateway RNA Router.</p>
+          </div>
+          <a href="/api/usage/export" className="rounded-xl bg-rna-600 px-5 py-2.5 text-sm font-semibold shadow-lg hover:bg-rna-500 transition-colors whitespace-nowrap">📥 Export CSV</a>
         </header>
 
         <UsageCharts
