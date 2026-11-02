@@ -89,7 +89,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((m: any) => (
+            {filtered.filter((m: any) => m && m.id).map((m: any) => (
               <div key={m.id} className="glass-card p-6 hover:-translate-y-1 transition-transform duration-300 group">
                 <div className="flex items-start justify-between">
                   <div className="text-3xl">{m.icon}</div>
